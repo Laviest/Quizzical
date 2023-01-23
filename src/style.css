@@ -195,3 +195,9 @@ label:active {
     padding-bottom:45px;
     color: white
 }
+
+.final-score-text {
+    /* position: absolute; */
+    margin-left: 300px;
+    top: 100px;
+}

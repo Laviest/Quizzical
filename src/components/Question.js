@@ -29,22 +29,22 @@ export default function Question(props) {
         // console.log(checkedAnswersMap)
     }
 
-    const answers = props.allchoices.map(
-        answ => {
-            map1.set('num', map1.get('num') + 1 || 1);
-            return <div className='quest--one'>
-                <input
-                    type="radio"
-                    className='quest--radio-custom'
-                    name={btnGroup.toString()}
-                    value={map1.get('num').toString()}
-                    id={map1.get('num').toString()}
-                    onChange={() => handleRadioButton(answ)}
-                />
-                <label htmlFor={map1.get('num').toString()}>{answ}</label>
-            </div>
-        }
-    )
+    // const answers = props.allchoices.map(
+    //     answ => {
+    //         map1.set('num', map1.get('num') + 1 || 1);
+    //         return <div className='quest--one'>
+    //             <input
+    //                 type="radio"
+    //                 className='quest--radio-custom'
+    //                 name={btnGroup.toString()}
+    //                 value={map1.get('num').toString()}
+    //                 id={map1.get('num').toString()}
+    //                 onChange={() => handleRadioButton(answ)}
+    //             />
+    //             <label htmlFor={map1.get('num').toString()}>{answ}</label>
+    //         </div>
+    //     }
+    // )
 
     // React.useEffect(() => {
     //     console.log(answers[0].props.children[0].props)
@@ -57,7 +57,7 @@ export default function Question(props) {
             <div className='quest--blob-two'></div>
             <h1 className='quest--title'>{props.quest}</h1>
             <div className='quest--answers-div'>
-            {answers}
+            {props.answers}
             </div>
             <div className='hr'>
             <hr></hr>
