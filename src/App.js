@@ -7,38 +7,36 @@ export default function App() {
     const [allData, setAllData] = React.useState([])
     const [quiz, setQuiz] = React.useState(false)
     const map = new Map([['num', 0]]);
-    const [allAnswers, setAllAnswers] = React.useState({})
-    const checkAnswersArray = {5: false, 10: false, 15: false, 20: false, 25: false}
+    let checkAnswersArray = {5: false, 10: false, 15: false, 20: false, 25: false}
+    let colorToBeFilled = {5: 'yellow', 10: 'yellow', 15: 'yellow', 20: 'yellow', 25: 'yellow'}
+    const [answersValues, setAnswerValues] = React.useState({5: '', 10: '', 15: '', 20: '', 25: ''})
     const [gameOver, setGameOver] = React.useState(false)
     const [count, setCount] = React.useState(0);
-
-
-    let btnGroup;
     let map1;
-
-    const [correctAnswersArray, setCorrectAnswersArray] = React.useState({5: false, 10: false, 15: false, 25: false, 30: false})
+    const [playAgain, setPlayAgain] = React.useState(false)
 
     React.useEffect(() => {
-        fetch('https://opentdb.com/api.php?amount=10')
+        fetch('https://opentdb.com/api.php?amount=5')
             .then(res => res.json())
             .then(data => setAllData(data.results))
-    }, [])
+        setPlayAgain(false)
+    }, [playAgain])
 
-    function handleRadioButton(answ, correct_answer, group) {
-        if(answ === correct_answer) {
-            // console.log(true)
+    function handleRadioButton(event, answ, correct_answer, group) {
+        if(event.target.value === correct_answer) {
+            colorToBeFilled[group] = 'green'
+            answersValues[group] = event.target.value.toString()
             checkAnswersArray[group] = true
         } else {
+            colorToBeFilled[group] = 'yellow'
+            answersValues[group] = event.target.value.toString()
             checkAnswersArray[group] = false
-            // console.log(false)
         }
-        // console.log(group)
-        console.log(checkAnswersArray)
     }
 
     let allQuestions;
 
-    const questions = allData.slice(0, 5).map(question => {
+    const questions = allData.map(question => {
         allQuestions = question.incorrect_answers
         allQuestions.push(question.correct_answer)
         if(allQuestions.length >= 5) {
@@ -59,51 +57,84 @@ export default function App() {
 
         const answers = allQuestions.map(
             answ => {
-                map1.set('num', map1.get('num') + 1 || 1);
                 const group = map.get('num').toString()
+                map1.set('num', map1.get('num') + 1 || 1);
+                let answered = false;
+                function changeWrongColor() {
+                    if(gameOver) {
+                        if(answ !== question.correct_answer && answersValues[group] === answ) {
+                            answered = true;
+                            return true;
+                        } else {
+                            return false
+                        }
+                    }
+                }
+                function changeCorrectColor() {
+                    if(gameOver) {
+                        if(answ === question.correct_answer) {
+                            return true
+                        } else {
+                            return false
+                        }
+                    }
+                }
                 return <div className='quest--one'>
                     <input
                         type="radio"
                         className='quest--radio-custom'
                         name={map.get('num').toString()}
-                        value={map1.get('num').toString()}
+                        value={answ}
                         id={map1.get('num').toString()}
-                        onChange={() => handleRadioButton(answ, question.correct_answer, group)}
+                        onChange={(e) => handleRadioButton(e, answ, question.correct_answer, group)}
                     />
-                    <label htmlFor={map1.get('num').toString()}>{answ}</label>
+                    {changeWrongColor()  && <label className='label--gameOver-wrong' htmlFor={map1.get('num').toString()}>{answ}</label>}
+                    {changeCorrectColor() && <label className='label--gameOver-correct' htmlFor={map1.get('num').toString()}>{answ}</label>}
+                
+                    {!changeCorrectColor() && !answered && <label className='label' htmlFor={map1.get('num').toString()}>{answ}</label>}
                 </div>
             }
         )
-        
+
         return <Question
             key={nanoid()}
             quest={question.question.replace('&quot;', "'").replace('&#039;', "'")} 
-            allchoices={allQuestions}
-            startNumber={map.get('num')}
-            correct_answer={question.correct_answer}
-            check_answers={() => checkAnswers}
-            answers_array = {correctAnswersArray}
-            answerIsCorrect = {false}
             answers={answers}
         />})
 
     function checkAnswers() {
-        console.log(checkAnswersArray)
         setCount(0)
         for(let i = 5; i <= 25; i+=5) {
             if(checkAnswersArray[i] === true) {
                 setCount(prevCount => prevCount + 1)
             }
+
         }
+        
         setGameOver(true)
     }
+
+    function funcPlayAgain() {
+        setPlayAgain(true)
+        setAnswerValues({5: '', 10: '', 15: '', 20: '', 25: ''})
+        colorToBeFilled = {5: 'yellow', 10: 'yellow', 15: 'yellow', 20: 'yellow', 25: 'yellow'}
+        map.set('num', 0)
+        checkAnswersArray = {5: false, 10: false, 15: false, 20: false, 25: false}
+        setCount(0)
+        setGameOver(false)
+    }
+
+    const gameOverButtonStyle = {
+        marginLeft: '980px'
+    }
+
 
     return (
         <div>
             {!quiz && <Start startQuiz={() => setQuiz(true)}/>}
             {quiz && questions}
-            {quiz && <button onClick={checkAnswers} className='check-answers-btn'>{gameOver ? 'Play Again': 'Check answers'}</button>}
-            {gameOver && <h3 className='final-score-text'>{`You have answered ${count} / 5 questions correctly!`}</h3>}
+            {quiz && <button onClick={gameOver ? funcPlayAgain : checkAnswers} style={gameOver ? gameOverButtonStyle : null} className='check-answers-btn'>{gameOver ? 'Play Again': 'Check answers'}</button>}
+            {gameOver && <h2 className='final-score-text'>{`You have answered ${count} / 5 questions correctly!`}</h2>}
         </div>
     )
 }

@@ -134,24 +134,58 @@ input[type='radio'][name='10'] { visibility: hidden; }
 input[type='radio'][name='15'] { visibility: hidden; }
 input[type='radio'][name='20'] { visibility: hidden; }
 input[type='radio'][name='25'] { visibility: hidden; }
-label {
+.label {
     margin-right: 20px;
     margin-bottom:20px;
-  display:inline-block;
-  /* padding-left:20px;
-  padding-right:20px; */
-  cursor: pointer;
-  padding:10px 15px;
-  width: fit-content;
-  border:1px solid #e0e0e0;
-  border-width: 0.5px;
-  border-radius: 8px;
-  background-color: #F5F7FB;
-  width:10em;
-  text-align:center;
-  font-family: 'Inter';
-  font-style: normal;
-  color: #293264;
+    display:inline-block;
+    cursor: pointer;
+    padding:10px 15px;
+    width: fit-content;
+    border:1px solid #e0e0e0;
+    border-width: 0.5px;
+    border-radius: 8px;
+    background-color: #F5F7FB;
+    width:10em;
+    text-align:center;
+    font-family: 'Inter';
+    font-style: normal;
+    color: #293264;
+}
+
+.label--gameOver-correct {
+    margin-right: 20px;
+    margin-bottom:20px;
+    display:inline-block;
+    cursor: pointer;
+    padding:10px 15px;
+    width: fit-content;
+    border:1px solid #e0e0e0;
+    border-width: 0.5px;
+    border-radius: 8px;
+    background-color: green;
+    width:10em;
+    text-align:center;
+    font-family: 'Inter';
+    font-style: normal;
+    color: #293264;
+}
+
+.label--gameOver-wrong {
+    margin-right: 20px;
+    margin-bottom:20px;
+    display:inline-block;
+    cursor: pointer;
+    padding:10px 15px;
+    width: fit-content;
+    border:1px solid #e0e0e0;
+    border-width: 0.5px;
+    border-radius: 8px;
+    background-color: red;
+    width:10em;
+    text-align:center;
+    font-family: 'Inter';
+    font-style: normal;
+    color: #293264;
 }
 
 label:hover {
@@ -176,6 +210,7 @@ label:active {
 }
 
 .check-answers-btn {
+    position: absolute;
     border-radius: 8px;
     width: fit-content;
     height:30px;
@@ -198,6 +233,6 @@ label:active {
 
 .final-score-text {
     /* position: absolute; */
-    margin-left: 300px;
-    top: 100px;
+    margin-left: 450px;
+    margin-top: 55px;
 }
